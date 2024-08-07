@@ -1,0 +1,67 @@
+package data;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author Pramila P
+ */
+
+import java.util.List;
+
+public class GildedRose {
+    private List<Item> items;
+
+    public GildedRose(List<Item> items) {
+        this.items = items;
+    }
+
+    public void updateQuality() {
+        for (Item item : items) {
+            switch (item.getName()) {
+                case "Aged Brie":
+                    updateAgedBrie(item);
+                    break;
+                case "Backstage passes":
+                    updateBackstagePasses(item);
+                    break;
+                case "Sulfuras":
+                    // Sulfuras doesn't change
+                    break;
+                default:
+                    updateNormalItem(item);
+                    break;
+            }
+        }
+    }
+
+    private void updateAgedBrie(Item item) {
+        item.setQuality(Math.min(item.getQuality() + 1, 50));
+        item.setSellIn(item.getSellIn() - 1);
+    }
+
+    private void updateBackstagePasses(Item item) {
+        if (item.getSellIn() <= 0) {
+            item.setQuality(0);
+        } else if (item.getSellIn() <= 5) {
+            item.setQuality(Math.min(item.getQuality() + 3, 50));
+        } else if (item.getSellIn() <= 10) {
+            item.setQuality(Math.min(item.getQuality() + 2, 50));
+        } else {
+            item.setQuality(Math.min(item.getQuality() + 1, 50));
+        }
+        item.setSellIn(item.getSellIn() - 1);
+    }
+
+    private void updateNormalItem(Item item) {
+        item.setQuality(Math.max(item.getQuality() - 1, 0));
+        item.setSellIn(item.getSellIn() - 1);
+        if (item.getSellIn() < 0) {
+            item.setQuality(Math.max(item.getQuality() - 1, 0));
+        }
+    }
+}
